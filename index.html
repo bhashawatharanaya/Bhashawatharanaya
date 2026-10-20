@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="si">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>පාලි භාෂාවතරණය 02</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@500;700&family=Noto+Sans+Sinhala:wght@400;500;700&display=swap">
+<style>
+/* Layout: ola-leaf strip header, chip navigation of six sections, single reading column with tables in scroll boxes */
+:root{
+  --bg:#F3F4EF; --surface:#FFFFFF; --leaf:#E9E3CF; --ink:#1E2740; --muted:#5B6275;
+  --line:#D9DBD2; --accent:#9A6A0C; --accent-soft:#F4E9CF; --ok:#2E7D4F; --bad:#B23A3A;
+  --display:"Noto Serif Sinhala",Georgia,serif; --body:"Noto Sans Sinhala","Iskoola Pota",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141824; --surface:#1C2131; --leaf:#2A2A22; --ink:#E7E8EE; --muted:#A3A8B8;
+  --line:#2F3547; --accent:#E2B24A; --accent-soft:#3A3220; --ok:#6CC490; --bad:#EE8080; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141824; --surface:#1C2131; --leaf:#2A2A22; --ink:#E7E8EE; --muted:#A3A8B8;
+  --line:#2F3547; --accent:#E2B24A; --accent-soft:#3A3220; --ok:#6CC490; --bad:#EE8080; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header.leaf{margin-top:16px;background:var(--leaf);border-radius:6px;padding:20px 22px;position:relative;overflow:hidden}
+header.leaf::before,header.leaf::after{content:"";position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--bg);transform:translateY(-50%)}
+header.leaf::before{left:22%}header.leaf::after{right:22%}
+h1{font-family:var(--display);font-size:1.75rem;margin:0;line-height:1.3;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;font-size:.95rem}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav button{font:inherit;font-size:.95rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
+nav button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h2{font-family:var(--display);font-size:1.35rem;margin:0 0 4px;text-wrap:balance}
+h3{font-family:var(--display);font-size:1.1rem;margin:0}
+.note{font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);padding:4px 0 4px 12px;margin:0}
+.list{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 16px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.row small{color:var(--muted);display:block}
+.row .num{font-family:var(--display);color:var(--accent);font-size:1.2rem;min-width:28px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:420px;font-size:.95rem}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-weight:700;color:var(--muted);font-size:.85rem;letter-spacing:.02em}
+td:first-child{font-weight:500;color:var(--accent);white-space:nowrap}
+.back{align-self:flex-start;font:inherit;background:none;border:none;color:var(--accent);cursor:pointer;padding:0}
+.pali{font-family:var(--display);font-size:1.15rem}
+.btn{font:inherit;background:var(--accent);color:var(--bg);border:none;border-radius:6px;padding:8px 16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+/* flashcard */
+.card{background:var(--leaf);border-radius:10px;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px;text-align:center;cursor:pointer;border:none;font:inherit;color:inherit;width:100%}
+.card .big{font-family:var(--display);font-size:2rem}
+.card .hint{color:var(--muted);font-size:.85rem}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem;font-variant-numeric:tabular-nums}
+/* quiz */
+.opt{font:inherit;text-align:left;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px 14px;cursor:pointer;width:100%}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--surface))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--surface))}
+.fb{margin:0;font-size:.95rem}
+.reveal{color:var(--muted)}
+.reveal.show{color:var(--ink)}
+.derive{font-family:var(--display);font-size:1.1rem}
+.derive b{color:var(--accent)}
+.tag{display:inline-block;font-size:.78rem;background:var(--accent-soft);color:var(--accent);padding:1px 10px;border-radius:999px}
+@media (prefers-reduced-motion:no-preference){.panel,.card{transition:background .2s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="leaf">
+    <h1>පාලි භාෂාවතරණය · දෙවන භාගය</h1>
+    <p class="sub">පාඩම්, වරනැගිලි, වචන, ප්‍රශ්න, පරිවර්තන සහ සන්ධි — එකම තැනක</p>
+  </header>
+  <nav id="nav" aria-label="කොටස්"></nav>
+  <main id="view" class="wrap" style="gap:16px"></main>
+</div>
+
+<script>
+const SECTIONS=[["lessons","පාඩම්"],["cards","වචන කාඩ්පත්"],["quiz","ප්‍රශ්න"],["trans","පරිවර්තන"],["sandhi","සන්ධි / පද සාධන"],["notes","අතිරේක විස්තර"]];
+const CASES=["පඨමා","දුතියා","තතියා","චතුත්ථී","පඤ්චමී","ඡට්ඨී","සත්තමී","ආලපන"];
+const LESSONS=[
+ {t:"ඉකාරාන්ත පුල්ලිංග",s:"මුනි ශබ්දය",intro:"'ඉ' යෙන් අවසන් වන පුල්ලිංග නාම 'මුනි' මෙන් වරනැගේ. ඉසි, අග්ගි, කපි, ගහපති, අතිථි, පති වැනි වචන මෙම ගණයට අයත් ය.",
+  table:[["මුනි","මුනයො, මුනී"],["මුනිං","මුනයො, මුනී"],["මුනිනා","මුනීහි, මුනීභි"],["මුනිනො, මුනිස්ස","මුනීනං"],["මුනිනා, මුනිම්හා, මුනිස්මා","මුනීහි, මුනීභි"],["මුනිනො, මුනිස්ස","මුනීනං"],["මුනිම්හි, මුනිස්මිං","මුනීසු"],["මුනි","මුනයො, මුනී"]],
+  ex:[["ඉසයො වනෙ වසන්ති.","ඍෂිවරු වනයෙහි වසති."],["ගහපති අග්ගිං ජාලෙති.","ගෘහපතියා ගින්න දල්වයි."]]},
+ {t:"උකාරාන්ත පුල්ලිංග",s:"භික්ඛු ශබ්දය",intro:"'උ' යෙන් අවසන් වන පුල්ලිංග නාම 'භික්ඛු' මෙන් වරනැගේ. ගරු, සෙතු, පසු, උච්ඡු, බන්ධු, තරු ආදිය මීට අයත් ය.",
+  table:[["භික්ඛු","භික්ඛවො, භික්ඛූ"],["භික්ඛුං","භික්ඛවො, භික්ඛූ"],["භික්ඛුනා","භික්ඛූහි, භික්ඛූභි"],["භික්ඛුනො, භික්ඛුස්ස","භික්ඛූනං"],["භික්ඛුනා, භික්ඛුම්හා, භික්ඛුස්මා","භික්ඛූහි, භික්ඛූභි"],["භික්ඛුනො, භික්ඛුස්ස","භික්ඛූනං"],["භික්ඛුම්හි, භික්ඛුස්මිං","භික්ඛූසු"],["භික්ඛු","භික්ඛවෙ, භික්ඛවො"]],
+  ex:[["භික්ඛවො විහාරෙ වසන්ති.","භික්ෂූහු විහාරයෙහි වසති."],["සිස්සො ගරුං වන්දති.","ශිෂ්‍යයා ගුරුවරයා වඳියි."]]},
+ {t:"ඊකාරාන්ත ස්ත්‍රීලිංග",s:"නදී ශබ්දය",intro:"'ඊ' යෙන් අවසන් වන ස්ත්‍රීලිංග නාම 'නදී' මෙන් වරනැගේ. ඉත්ථී, දෙවී, කුමාරී, බ්‍රාහ්මණී, ගාවී ආදිය මීට අයත් ය.",
+  table:[["නදී","නදී, නදියො"],["නදිං","නදී, නදියො"],["නදියා","නදීහි, නදීභි"],["නදියා","නදීනං"],["නදියා","නදීහි, නදීභි"],["නදියා","නදීනං"],["නදියා, නදියං","නදීසු"],["නදි","නදී, නදියො"]],
+  ex:[["කුමාරී නදියා උදකං ආහරති.","කුමරිය ගඟින් ජලය ගෙන එයි."],["නදීසු මච්ඡා වසන්ති.","ගංගාවල මසුන් වසති."]]},
+ {t:"අනාගත කාලය",s:"භවිස්සන්ති විභත්තිය",intro:"ධාතුවට 'ඉස්ස' එක් කර අනාගත කාල ක්‍රියා සෑදේ. පච + ඉස්ස + ති = පචිස්සති (පිසින්නේය).",verb:true,
+  table:[["පචිස්සති","පචිස්සන්ති"],["පචිස්සසි","පචිස්සථ"],["පචිස්සාමි","පචිස්සාම"]],
+  ex:[["අහං සුවෙ ගාමං ගමිස්සාමි.","මම හෙට ගමට යන්නෙමි."],["මයං ධම්මං සුණිස්සාම.","අපි ධර්මය අසන්නෙමු."]]},
+ {t:"අතීත කාලය",s:"අජ්ජතනී විභත්තිය",intro:"ළඟ අතීතය දක්වන අජ්ජතනී විභත්තිය පාලියේ බහුලව යෙදෙන අතීත කාල රූපයයි.",verb:true,
+  table:[["පචි","පචිංසු"],["පචො","පචිත්ථ"],["පචිං","පචිම්හා"]],
+  ex:[["උපාසකො භික්ඛුං වන්දි.","උපාසකයා භික්ෂුව වැන්දේය."],["දාරකා උය්‍යානං ගච්ඡිංසු.","ළමයි උයනට ගියහ."]]},
+ {t:"ආණත්ති සහ විධි",s:"පඤ්චමී සහ සත්තමී විභත්ති",intro:"පඤ්චමී විභත්තිය ආඥා, ආශීර්වාද, ඉල්ලීම් ප්‍රකාශ කරයි. සත්තමී විභත්තිය 'කළ යුතුය / කරන්නේ නම්' යන අර්ථ දෙයි.",verb:true,
+  table:[["පචතු · පචෙය්‍ය","පචන්තු · පචෙය්‍යුං"],["පච, පචාහි · පචෙය්‍යාසි","පචථ · පචෙය්‍යාථ"],["පචාමි · පචෙය්‍යාමි","පචාම · පචෙය්‍යාම"]],
+  ex:[["සබ්බෙ සත්තා සුඛිතා හොන්තු.","සියලු සත්වයෝ සුවපත් වෙත්වා."],["පාණං න හනෙය්‍ය.","සතෙකු නොමැරිය යුතුය."]]},
+ {t:"ත්වා සහ තුං ප්‍රත්‍යය",s:"පූර්වකාලක හා තුමන්ත ක්‍රියා",intro:"'ත්වා' ප්‍රත්‍යය 'කොට / ගොස්' යන අර්ථයෙන් පළමු ක්‍රියාවක් දක්වයි. 'තුං' ප්‍රත්‍යය 'කිරීමට' යන අර්ථය දෙයි. මේ දෙකම නොවරනැගෙන අව්‍යය පද වේ.",
+  table:null,pairs:[["ගන්ත්වා","ගොස්"],["දිස්වා","දැක"],["සුත්වා","අසා"],["කත්වා","කොට"],["නිසීදිත්වා","හිඳ"],["ගන්තුං","යන්නට"],["කාතුං","කිරීමට"],["පස්සිතුං","දකින්නට"],["සොතුං","අසන්නට"],["දාතුං","දෙන්නට"]],
+  ex:[["උපාසකො විහාරං ගන්ත්වා ධම්මං සුණාති.","උපාසකයා විහාරයට ගොස් ධර්මය අසයි."],["දාරකා පොත්ථකානි පඨිතුං පාඨසාලං ගච්ඡන්ති.","ළමයි පොත් කියවන්නට පාසලට යති."]]}
+];
+const VOCAB=[["මුනි","මුනිවරයා"],["ඉසි","ඍෂිවරයා"],["අග්ගි","ගින්න"],["කපි","වඳුරා"],["ගහපති","ගෘහපතියා"],["අතිථි","අමුත්තා"],["භික්ඛු","භික්ෂුව"],["ගරු","ගුරුවරයා"],["සෙතු","පාලම"],["උච්ඡු","උක්"],["බන්ධු","නෑයා"],["තරු","ගස"],["නදී","ගඟ"],["ඉත්ථී","ස්ත්‍රිය"],["දෙවී","දේවිය"],["කුමාරී","කුමරිය"],["රත්ති","රාත්‍රිය"],["භූමි","පොළොව"],["උදක","ජලය"],["විහාර","පන්සල"],["උය්‍යාන","උයන"],["පොත්ථක","පොත"],["සුවෙ","හෙට"],["අජ්ජ","අද"],["හිය්‍යො","ඊයේ"],["ගච්ඡති","යයි"],["වසති","වාසය කරයි"],["වන්දති","වඳියි"],["සුණාති","අසයි"],["පස්සති","දකියි"],["දෙසෙති","දේශනා කරයි"],["ආහරති","ගෙන එයි"]];
+const QUIZ=[
+ ["'මුනි' ශබ්දයේ සත්තමී ඒකවචනය කුමක්ද?",["මුනිම්හි","මුනිනා","මුනීසු","මුනිනො"],0,"සත්තමී ඒකවචනය: මුනිම්හි, මුනිස්මිං. 'මුනීසු' බහුවචනයයි."],
+ ["'භික්ඛු' ශබ්දයේ ආලපන බහුවචනය කුමක්ද?",["භික්ඛූනං","භික්ඛවෙ","භික්ඛුනා","භික්ඛු"],1,"සූත්‍රවල 'භික්ඛවෙ' (මහණෙනි) ලෙස නිතර යෙදේ."],
+ ["'නදී' ශබ්දයේ තතියා ඒකවචනය කුමක්ද?",["නදීහි","නදිං","නදියා","නදී"],2,"ස්ත්‍රීලිංගයේ තතියා, චතුත්ථී, පඤ්චමී, ඡට්ඨී ඒකවචනය 'නදියා' වේ."],
+ ["'පචිස්සාමි' ක්‍රියාවේ කාලය කුමක්ද?",["වර්තමාන","අතීත","අනාගත","ආණත්ති"],2,"'ඉස්ස' කොටස අනාගත කාලය හඟවයි."],
+ ["'ගන්ත්වා' යන්නෙහි අර්ථය?",["යන්නට","ගොස්","ගියේය","යන්නේය"],1,"'ත්වා' ප්‍රත්‍යය පූර්වකාලක ක්‍රියා සාදයි."],
+ ["'කාතුං' යන්නෙහි අර්ථය?",["කොට","කළේය","කිරීමට","කරයි"],2,"'තුං' ප්‍රත්‍යය 'කිරීමට' අර්ථය දෙයි."],
+ ["න + අත්ථි = ?",["නාත්ථි","නත්ථි","නෙත්ථි","නත්ථී"],1,"පූර්ව ස්වරය ලොප් වී 'නත්ථි' වේ."],
+ ["ඉති + එවං = ?",["ඉතෙවං","ඉච්චෙවං","ඉත්‍යෙවං","ඉතිවං"],1,"ඉ 'ය' වී, 'ත්‍ය' 'ච්ච' වේ."],
+ ["'භික්ඛූනං' කුමන විභක්තියද?",["පඨමා බහු","දුතියා ඒක","චතුත්ථී/ඡට්ඨී බහු","සත්තමී බහු"],2,"චතුත්ථී සහ ඡට්ඨී බහුවචන රූප සමාන ය."],
+ ["'පචිංසු' කුමන පුරුෂ හා වචනයද?",["ප්‍රථම පුරුෂ බහුවචන","මධ්‍යම පුරුෂ ඒකවචන","උත්තම පුරුෂ බහුවචන","ප්‍රථම පුරුෂ ඒකවචන"],0,"අජ්ජතනී: පචි / පචිංසු."],
+ ["තත්‍ර + අයං = ?",["තත්‍රයං","තත්‍රායං","තත්‍රෙයං","තත්‍රියං"],1,"සමාන ස්වර දෙක එක්ව දීර්ඝ වේ."],
+ ["'හොන්තු' කුමන විභත්තියද?",["පඤ්චමී (ආණත්ති)","සත්තමී","භවිස්සන්ති","අජ්ජතනී"],0,"'සුඛිතා හොන්තු' — සුවපත් වෙත්වා."]
+];
+const TRANS=[
+ ["මුනි ධම්මං දෙසෙති.","මුනිවරයා ධර්මය දේශනා කරයි."],
+ ["භික්ඛවො විහාරෙ වසන්ති.","භික්ෂූහු විහාරයෙහි වසති."],
+ ["කුමාරී නදියා උදකං ආහරති.","කුමරිය ගඟින් ජලය ගෙන එයි."],
+ ["උපාසකො විහාරං ගන්ත්වා භික්ඛුං වන්දි.","උපාසකයා විහාරයට ගොස් භික්ෂුව වැන්දේය."],
+ ["අහං සුවෙ ගාමං ගමිස්සාමි.","මම හෙට ගමට යන්නෙමි."],
+ ["රත්තියං චන්දො දිස්සති.","රාත්‍රියෙහි සඳ පෙනේ."],
+ ["දාරකා පොත්ථකානි පඨිතුං පාඨසාලං ගච්ඡන්ති.","ළමයි පොත් කියවන්නට පාසලට යති."],
+ ["සබ්බෙ සත්තා සුඛිතා හොන්තු.","සියලු සත්වයෝ සුවපත් වෙත්වා."],
+ ["කපයො තරූසු වසන්ති.","වඳුරෝ ගස්වල වසති."],
+ ["ගහපති අතිථිනො භත්තං අදාසි.","ගෘහපතියා අමුත්තාට බත් දුන්නේය."]
+];
+const SANDHI=[
+ ["ස්වර සන්ධි","න + අත්ථි","නත්ථි","පූර්ව ස්වරය (අ) ලොප් වේ."],
+ ["ස්වර සන්ධි","ලොක + අග්ගො","ලොකග්ගො","පූර්ව ස්වර ලොපය."],
+ ["ස්වර සන්ධි","යස්ස + ඉන්ද්‍රියානි","යස්සින්ද්‍රියානි","පූර්ව ස්වර ලොපය."],
+ ["ස්වර සන්ධි","තත්‍ර + අයං","තත්‍රායං","සමාන ස්වර එක්ව දීර්ඝ වේ."],
+ ["ස්වර සන්ධි","බහු + උපකාරො","බහූපකාරො","සමාන ස්වර එක්ව දීර්ඝ වේ."],
+ ["ස්වර සන්ධි","ඉති + එවං","ඉච්චෙවං","ඉ → ය; ත්‍ය → ච්ච."],
+ ["ස්වර සන්ධි","වි + ආකතො","ව්‍යාකතො","ඉ ස්වරය 'ය' බවට පත් වේ."],
+ ["ආගම සන්ධි","අජ්ජ + අග්ගෙ","අජ්ජතග්ගෙ","මැදට 'ත්' ආගම වේ."],
+ ["නිග්ගහීත සන්ධි","එවං + අස්ස","එවමස්ස","ස්වරයක් පරවූ කල ං → ම්."],
+ ["නිග්ගහීත සන්ධි","තං + ඛණං","තඞ්ඛණං","ං පසු වර්ගයේ අනුනාසිකය (ඞ) වේ."]
+];
+const PADA=[
+ ["මුනීනං","මුනි + නං","'නං' පරවූ කල අන්ත 'ඉ' දීර්ඝ වී මුනීනං වේ."],
+ ["මුනිස්ස","මුනි + ස","චතුත්ථී/ඡට්ඨී ඒකවචන 'ස' දෙගුණ වී මුනිස්ස; විකල්පයෙන් 'නො' වී මුනිනො."],
+ ["මුනයො","මුනි + යො","අන්ත 'ඉ' ගුණ වී 'අය්' වී, 'යො' සමඟ මුනයො වේ."],
+ ["භික්ඛවො","භික්ඛු + යො","අන්ත 'උ' ගුණ වී 'අව්' වී, භික්ඛවො වේ."],
+ ["පචිස්සති","පච + ඉස්ස + ති","ධාතුවට අනාගත ප්‍රත්‍යය 'ඉස්ස' සහ 'ති' එක් වේ."],
+ ["ගන්ත්වා","ගම් + ත්වා","ධාතු අන්ත 'ම්' 'න්' වී ගන්ත්වා වේ."]
+];
+const NOTES=[
+ ["චතුත්ථී = ඡට්ඨී","පුල්ලිංග හා ස්ත්‍රීලිංග දෙකෙහිම චතුත්ථී සහ ඡට්ඨී රූප එක සමාන ය. වාක්‍යයේ අර්ථයෙන් ඒවා වෙන් කර හඳුනාගත යුතුය."],
+ ["තතියා = පඤ්චමී (බහු)","තතියා සහ පඤ්චමී බහුවචන රූප සමාන ය (මුනීහි, භික්ඛූහි, නදීහි)."],
+ ["ස්මිං / ම්හි, ස්මා / ම්හා","සත්තමී හා පඤ්චමී ඒකවචනයේ මේ ප්‍රත්‍යය දෙක විකල්ප වශයෙන් යෙදේ: මුනිස්මිං, මුනිම්හි."],
+ ["ස්ත්‍රීලිංගයේ 'යා'","ඊකාරාන්ත ස්ත්‍රීලිංගයේ තතියා සිට සත්තමී දක්වා ඒකවචනයේ 'යා' රූපය පොදු ය: නදියා."],
+ ["ත්වා ක්‍රියාවේ කර්තෘ","ත්වා ක්‍රියාවත් ප්‍රධාන ක්‍රියාවත් එකම කර්තෘගේ ක්‍රියා විය යුතුය."],
+ ["අජ්ජතනී 'අ' ආගමය","බොහෝ අජ්ජතනී රූපවල ධාතුවට මුලින් 'අ' එක් වේ: අගමා, අදාසි, අකාසි."]
+];
+
+let state={sec:"lessons",lesson:null,ci:0,flip:false,qi:0,score:0,ans:null};
+try{const s=JSON.parse(localStorage.getItem("pb2")||"{}");if(s.sec)state.sec=s.sec}catch(e){}
+const $=s=>document.querySelector(s);
+function save(){try{localStorage.setItem("pb2",JSON.stringify({sec:state.sec}))}catch(e){}}
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function renderNav(){
+ $("#nav").innerHTML=SECTIONS.map(([k,l])=>`<button type="button" data-sec="${k}" aria-pressed="${state.sec===k}">${l}</button>`).join("");
+ $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{state.sec=b.dataset.sec;state.lesson=null;save();render()});
+}
+const V=()=>$("#view");
+function lessons(){
+ if(state.lesson!==null)return lesson(LESSONS[state.lesson],state.lesson);
+ V().innerHTML=`<div><h2>පාඩම්</h2><p class="note">නියැදි අන්තර්ගතයකි. පොතේ පාඩම් අනුපිළිවෙළ හා පිටු අනුව තවම ගළපා නැත.</p></div>
+ <div class="list">${LESSONS.map((l,i)=>`<button type="button" class="row" data-i="${i}"><span class="num">${i+1}</span><span style="flex:1;min-width:0"><b>${l.t}</b><small>${l.s}</small></span><span aria-hidden="true">›</span></button>`).join("")}</div>`;
+ V().querySelectorAll(".row").forEach(r=>r.onclick=()=>{state.lesson=+r.dataset.i;render()});
+}
+function lesson(l,i){
+ let tbl="";
+ if(l.table&&l.verb){tbl=`<div class="tbl"><table><thead><tr><th>පුරුෂ</th><th>ඒකවචන</th><th>බහුවචන</th></tr></thead><tbody>${["ප්‍රථම","මධ්‍යම","උත්තම"].map((p,j)=>`<tr><td>${p}</td><td>${l.table[j][0]}</td><td>${l.table[j][1]}</td></tr>`).join("")}</tbody></table></div>`}
+ else if(l.table){tbl=`<div class="tbl"><table><thead><tr><th>විභත්ති</th><th>ඒකවචන</th><th>බහුවචන</th></tr></thead><tbody>${CASES.map((c,j)=>`<tr><td>${c}</td><td>${l.table[j][0]}</td><td>${l.table[j][1]}</td></tr>`).join("")}</tbody></table></div>`}
+ else if(l.pairs){tbl=`<div class="tbl"><table><thead><tr><th>පාලි</th><th>අර්ථය</th></tr></thead><tbody>${l.pairs.map(p=>`<tr><td>${p[0]}</td><td>${p[1]}</td></tr>`).join("")}</tbody></table></div>`}
+ V().innerHTML=`<button type="button" class="back">‹ සියලු පාඩම්</button>
+ <div><span class="tag">පාඩම ${i+1}</span><h2>${l.t}</h2><p class="sub" style="margin:0">${l.s}</p></div>
+ <div class="panel"><p style="margin:0">${l.intro}</p></div>
+ <div class="panel"><h3>${l.verb?"වරනැගීම (පච ධාතුව)":l.pairs?"නිදසුන් පද":"වරනැගීම"}</h3>${tbl}</div>
+ <div class="panel"><h3>නිදසුන් වාක්‍ය</h3>${l.ex.map(e=>`<div><div class="pali">${e[0]}</div><div class="reveal show">${e[1]}</div></div>`).join("")}</div>
+ <div class="btns">${i>0?`<button type="button" class="btn ghost" data-go="${i-1}">‹ පෙර පාඩම</button>`:""}${i<LESSONS.length-1?`<button type="button" class="btn" data-go="${i+1}">ඊළඟ පාඩම ›</button>`:""}</div>`;
+ V().querySelector(".back").onclick=()=>{state.lesson=null;render()};
+ V().querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{state.lesson=+b.dataset.go;render();scrollTo(0,0)});
+}
+function cards(){
+ const w=VOCAB[state.ci];
+ V().innerHTML=`<div><h2>වචන කාඩ්පත්</h2><p class="note">කාඩ්පත තට්ටු කර අර්ථය බලන්න.</p></div>
+ <button type="button" class="card" id="card" aria-label="කාඩ්පත පෙරළන්න">${state.flip?`<span class="hint">${w[0]}</span><span class="big" style="font-size:1.6rem">${w[1]}</span>`:`<span class="big">${w[0]}</span><span class="hint">අර්ථය බැලීමට තට්ටු කරන්න</span>`}</button>
+ <div class="meta"><span>${state.ci+1} / ${VOCAB.length}</span><span>පාලි → සිංහල</span></div>
+ <div class="btns"><button type="button" class="btn ghost" id="prev">‹ පෙර</button><button type="button" class="btn" id="next">ඊළඟ ›</button><button type="button" class="btn ghost" id="shuf">මිශ්‍ර කරන්න</button></div>`;
+ $("#card").onclick=()=>{state.flip=!state.flip;cards()};
+ $("#prev").onclick=()=>{state.ci=(state.ci-1+VOCAB.length)%VOCAB.length;state.flip=false;cards()};
+ $("#next").onclick=()=>{state.ci=(state.ci+1)%VOCAB.length;state.flip=false;cards()};
+ $("#shuf").onclick=()=>{for(let i=VOCAB.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[VOCAB[i],VOCAB[j]]=[VOCAB[j],VOCAB[i]]}state.ci=0;state.flip=false;cards()};
+}
+function quiz(){
+ if(state.qi>=QUIZ.length){
+  V().innerHTML=`<div><h2>ප්‍රශ්නාවලිය අවසන්</h2></div><div class="panel"><p class="pali" style="margin:0">ලකුණු: ${state.score} / ${QUIZ.length}</p><div class="btns"><button type="button" class="btn" id="again">නැවත උත්සාහ කරන්න</button></div></div>`;
+  $("#again").onclick=()=>{state.qi=0;state.score=0;state.ans=null;quiz()};return}
+ const [q,opts,c,ex]=QUIZ[state.qi];
+ V().innerHTML=`<div><h2>ප්‍රශ්න</h2></div>
+ <div class="meta"><span>ප්‍රශ්නය ${state.qi+1} / ${QUIZ.length}</span><span>ලකුණු ${state.score}</span></div>
+ <div class="panel"><p class="pali" style="margin:0">${q}</p>
+ ${opts.map((o,i)=>{let cl="opt";if(state.ans!==null){if(i===c)cl+=" right";else if(i===state.ans)cl+=" wrong"}return`<button type="button" class="${cl}" data-o="${i}" ${state.ans!==null?"disabled":""}>${o}</button>`}).join("")}
+ ${state.ans!==null?`<p class="fb"><b style="color:var(${state.ans===c?"--ok":"--bad"})">${state.ans===c?"නිවැරදියි!":"වැරදියි."}</b> ${ex}</p><div class="btns"><button type="button" class="btn" id="nq">ඊළඟ ප්‍රශ්නය ›</button></div>`:""}</div>`;
+ V().querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{state.ans=+b.dataset.o;if(state.ans===c)state.score++;quiz()});
+ const n=$("#nq");if(n)n.onclick=()=>{state.qi++;state.ans=null;quiz()};
+}
+function trans(){
+ V().innerHTML=`<div><h2>පරිවර්තන</h2><p class="note">පාලි වාක්‍යය සිංහලට පරිවර්තනය කර බලා, "පිළිතුර" ඔබා සසඳන්න.</p></div>
+ <div class="btns"><button type="button" class="btn" id="mode" data-m="p2s">මාදිලිය: පාලි → සිංහල</button></div>
+ <div class="list" id="tl"></div>`;
+ let m="p2s";
+ const draw=()=>{$("#tl").innerHTML=TRANS.map((t,i)=>{const [a,b]=m==="p2s"?t:[t[1],t[0]];return`<div class="panel"><div class="meta"><span>${i+1}</span></div><div class="${m==="p2s"?"pali":""}" style="font-size:1.1rem">${a}</div><div class="reveal" id="r${i}" hidden><span class="${m==="p2s"?"":"pali"}">${b}</span></div><div class="btns"><button type="button" class="btn ghost" data-r="${i}">පිළිතුර</button></div></div>`}).join("");
+  $("#tl").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{const r=$("#r"+b.dataset.r);r.hidden=!r.hidden;r.classList.add("show");b.textContent=r.hidden?"පිළිතුර":"සඟවන්න"})};
+ $("#mode").onclick=()=>{m=m==="p2s"?"s2p":"p2s";$("#mode").textContent="මාදිලිය: "+(m==="p2s"?"පාලි → සිංහල":"සිංහල → පාලි");draw()};
+ draw();
+}
+function sandhi(){
+ V().innerHTML=`<div><h2>සන්ධි සහ පද සාධන</h2><p class="note">සන්ධි පදය බලා, බෙදීම සිතා, "සාධනය" ඔබන්න.</p></div>
+ <div class="panel"><h3>සන්ධි</h3><div class="list">${SANDHI.map((s,i)=>`<div style="border-bottom:1px solid var(--line);padding-bottom:10px"><span class="tag">${s[0]}</span><div class="derive" style="margin-top:4px"><b>${s[2]}</b></div><div id="sd${i}" hidden><div class="derive">${s[1]} = ${s[2]}</div><div class="sub">${s[3]}</div></div><button type="button" class="back" data-s="${i}" style="margin-top:4px">සාධනය ›</button></div>`).join("")}</div></div>
+ <div class="panel"><h3>පද සාධන</h3><div class="list">${PADA.map((p,i)=>`<div style="border-bottom:1px solid var(--line);padding-bottom:10px"><div class="derive"><b>${p[0]}</b></div><div id="pd${i}" hidden><div class="derive">${p[1]} → ${p[0]}</div><div class="sub">${p[2]}</div></div><button type="button" class="back" data-p="${i}" style="margin-top:4px">සාධනය ›</button></div>`).join("")}</div></div>`;
+ V().querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const e=$("#sd"+b.dataset.s);e.hidden=!e.hidden});
+ V().querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const e=$("#pd"+b.dataset.p);e.hidden=!e.hidden});
+}
+function notes(){
+ V().innerHTML=`<div><h2>අතිරේක විස්තර</h2></div><div class="list">${NOTES.map(n=>`<div class="panel"><h3>${n[0]}</h3><p style="margin:0">${n[1]}</p></div>`).join("")}</div>`;
+}
+function render(){renderNav();({lessons,cards,quiz,trans,sandhi,notes})[state.sec]()}
+render();
+</script>
+</body>
+</html>
